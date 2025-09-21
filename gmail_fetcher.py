@@ -8,9 +8,11 @@ from google.auth.transport.requests import Request
 from firebase_config import db
 from gemini_int import parse_expense
 
-# Load Google OAuth client info from JSON file
-with open("OAuth.json") as f:
-    creds_data = json.load(f)
+import os
+import json
+
+creds_data = json.loads(os.environ["GOOGLE_OAUTH_JSON"])
+
 
 CLIENT_ID = creds_data["installed"]["client_id"]
 CLIENT_SECRET = creds_data["installed"]["client_secret"]
