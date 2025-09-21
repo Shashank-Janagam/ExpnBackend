@@ -60,3 +60,33 @@ def parse_expense(uid, text):
     except Exception as e:
         print(f"Error parsing expense: {e}")
         return None
+def safe_parse_expense(uid, text):
+    expense_data = parse_expense(uid, text)
+    if not expense_data:
+        return None
+
+    # Ensure required keys exist
+    expense_data.setdefault("name", "Unknown")
+    expense_data.setdefault("amount", 0)
+    expense_data.setdefault("category", "Uncategorized")
+    expense_data.setdefault("merchant", "Unknown")
+    expense_data.setdefault("currency", "INR")
+
+    # Validate amount
+    try:
+        expense_data["amount"] = float(expense_data["amount"])
+        if expense_data["amount"] <= 0:
+            return None
+    except Exception:
+        return None
+
+    # Validate date format
+    date_str = expense_data.get("date")
+    try:
+        # Only take YYYY-MM-DD if extra time is included
+        date_str = date_str.split()[0]
+        expense_data["date"] = datetime.strptime(date_str, "%Y-%m-%d").strftime("%Y-%m-%d")
+    except Exception:
+        expense_data["date"] = datetime.now().strftime("%Y-%m-%d")
+
+    return expense_data
