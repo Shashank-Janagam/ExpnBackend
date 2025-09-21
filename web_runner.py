@@ -1,12 +1,12 @@
 import os
 from flask import Flask
-from gmail_fetcher import main  # make sure gmail_fetcher.py has a main() function
+from gmail_fetcher import main
 
 app = Flask(__name__)
 
 @app.route("/")
 def index():
-    main()  # runs your Gmail fetcher
+    main()
     return "Gmail fetcher ran successfully!"
 
 if __name__ == "__main__":
